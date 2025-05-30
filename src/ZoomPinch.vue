@@ -22,13 +22,15 @@
     height fit-content
 
   .debug
+    font-size 1rem
     position fixed
     top 10px
     left 10px
-    background #77777755
+    background #38383888
     padding 10px
     border-radius 5px
     border 2px solid white
+    white-space pre
 </style>
 
 <template>
@@ -58,6 +60,10 @@
       <div>x: {{ offsetX }}</div>
       <div>y: {{ offsetY }}</div>
       <div>scale: {{ scale }}</div>
+      <hr>
+      <div>moveOptions: {{JSON.stringify(moveOptions).replace(/([,{])/g, '$1\n').replace(/([}])/g, '\n$1')}}</div>
+      <hr>
+      <div>scaleOptions: {{JSON.stringify(scaleOptions).replace(/([,{])/g, '$1\n').replace(/([}])/g, '\n$1')}}</div>
     </section>
   </div>
 </template>
@@ -575,7 +581,7 @@ export default {
       const dT = Date.now() - (this.moveOptions.lastUpdatedTime ?? 0);
       const speedX = (this.moveOptions.currentMoveDelta.x ?? 0) / dT * INERTIA_SENSIVITY;
       const speedY = (this.moveOptions.currentMoveDelta.y ?? 0) / dT * INERTIA_SENSIVITY;
-      fakeMove(speedX, speedY);
+      fakeMove(speedX || 0, speedY || 0);
     },
 
     loadNumberFromLocalStorage<T>(fieldName: string, defaultValue: T): number | T {
@@ -691,16 +697,18 @@ export default {
     defaultX() {
       if (this.resetOnDefaultsChanged) {
         this.offsetX = this.defaultX ?? this.offsetX;
+        this.updatePos();
       }
     },
     defaultY() {
       if (this.resetOnDefaultsChanged) {
         this.offsetY = this.defaultY ?? this.offsetY;
+        this.updatePos();
       }
     },
     defaultCentered() {
       if (this.resetOnDefaultsChanged) {
-        this.offsetY = this.defaultY ?? this.offsetY;
+        this.reset();
       }
     },
     defaultScale() {
@@ -710,7 +718,7 @@ export default {
         }
       }
     },
-    resetOnPropsChanged() {
+    resetOnDefaultsChanged() {
       if (this.resetOnDefaultsChanged) {
         this.reset();
       }
@@ -737,6 +745,11 @@ export default {
     },
     isOffsetsScalable() {
       this.updatePos();
+    },
+    resetOnInnerSizeChanged() {
+      if (this.resetOnInnerSizeChanged) {
+        this.reset();
+      }
     },
     innerElementWidth() {
       if (this.resetOnInnerSizeChanged) {

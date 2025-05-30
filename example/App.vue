@@ -36,7 +36,7 @@ body
   min-height 100vh
   gap 20px
   @media(max-width: 700px)
-    flex-direction column-reverse
+    flex-direction column
 </style>
 
 <style lang="stylus" scoped>
@@ -44,6 +44,7 @@ body
   border-radius 15px
   box-shadow 0 0 20px black
   position relative
+  height calc(100vh - 60px)
   flex 1
   &.with-bg
     background #2b2b2b linear-gradient(-20deg, mix(red, transparent, 30%), mix(black, transparent, 30%))
@@ -73,7 +74,7 @@ body
     border-bottom 1px solid #4b4b4b
     padding 20px 0
     header
-      font-size 2rem
+      font-size 1.8rem
       letter-spacing 0.5px
     label
       color #c2c2c2
@@ -81,7 +82,7 @@ body
       justify-content space-between
       align-items center
       gap 10px
-      font-size 1.2rem
+      font-size 1rem
       transition color 0.2s ease
       padding 5px 0
       cursor pointer
@@ -99,7 +100,7 @@ body
         border-radius 5px
         background #3d3d3d
         border none
-        font-size 1.2rem
+        font-size 1rem
         transition background 0.2s ease
         &[type=checkbox]
           width 1.5rem
@@ -203,7 +204,7 @@ body
     :default-x="zoomPinchOptions.defaultX"
     :default-y="zoomPinchOptions.defaultY"
     :default-scale="zoomPinchOptions.defaultScale"
-    :centered="zoomPinchOptions.defaultCentered"
+    :default-centered="zoomPinchOptions.defaultCentered"
     :reset-on-defaults-changed="zoomPinchOptions.resetOnDefaultsChanged"
     :reset-on-inner-size-changed="zoomPinchOptions.resetOnInnerSizeChanged"
     :inner-element-width="zoomPinchOptions.innerElementWidth"
@@ -243,7 +244,7 @@ export default {
         },
         defaultX: 300,
         defaultY: 300,
-        defaultScale: 2,
+        defaultScale: 1,
         defaultCentered: true,
 
         isOffsetsScalable: true,
@@ -258,7 +259,7 @@ export default {
         debug: true,
         mouse: true,
         touch: true,
-        gesture: true,
+        gesture: false,
         smoothScale: true,
       },
 
