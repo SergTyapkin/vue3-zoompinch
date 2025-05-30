@@ -8,15 +8,15 @@
 🔥 Light and fast Vue.js component for zoom-pinch, pan and translate inner element like in Google maps with really
 much customable settings
 
-> ![TIP]
+> [!TIP]
 > Component can store it's state into localStorage and restore state from it.
 > To use it, just set the `localStorageUniqueName` prop!
 
-> ![IMPORTANT]
+> [!IMPORTANT]
 > By default `gesture` controls are not enabled and wheel scrolling is scaling.
 > If you want to enable touchpad gestures and moving by wheel scrolling, enable `gesture`
 
-> ![IMPORTANT]
+> [!IMPORTANT]
 > Automatically uses:
 > ```CSS
 > width: 100%;
@@ -25,20 +25,51 @@ much customable settings
 ----
 
 ## 👉 Usage:
-
+main.ts:
+```JS
+import '@sergtyapkin/vue3-zoompinch/style.css';
+```
+Any *.vue file:
 ```VUE
-
 <template>
   <!-- ... -->
-  <ZoomPinch>
+  <ZoomPinch
+    centered
+    mouse
+    touch
+    gesture
+    :min-scale="0.2"
+    :max-scale="10"
+    @drag="(dx, dy) => yourOnDrag(dx, dy)"
+    @move="(dx, dy) => yourOnMove(dx, dy)"
+    @scale="(scaleDelta) => yourOnScale(scaleDelta)"
+    @click-clean="(x, y) => yourOnClick(x, y)"
+  >
     <!-- Any of your own inner HTML element. For example <img> -->
   </ZoomPinch>
 </template>
 ```
+```VUE
+<script lang="ts">
+  import ZoomPinch from '@sergtyapkin/vue3-zoompinch';
+  
+  export default {
+    components: {ZoomPinch},
+    
+    methods: {
+      yourOnDrag(dx: number, dy: number) {console.log("Dragged by:", dx, dy)},
+      yourOnMove(dx: number, dy: number) {console.log("Moved by:", dx, dy)},
+      yourOnScale(scaleDelta: number) {console.log("Scaled by:", scaleDelta)},
+      yourOnClick(x: number, y: number) {console.log("Clicked on:", x, y)},
+    }
+  }
+</script>
+```
 
 ## ⚙️ Props
 
-All props are not required 🙃
+> [!TIP]
+> All props are not required 🙃
 
 #### Controls
 

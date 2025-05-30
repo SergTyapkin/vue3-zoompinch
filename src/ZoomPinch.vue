@@ -86,7 +86,7 @@ const INERTIA_MOVING_KILL_VAL = 0.02;
 
 export default {
   emits: [
-    'clickClean', // (pageX, pageY) click only if it wasn't dragging. Default "click" can be emitted many times and after dragging
+    'clickClean', // (elementX, elementY) click only if it wasn't dragging. Default "click" can be emitted many times and after dragging
     'drag', // (deltaX, deltaY) - emits when user drags screen
     'scale', // (scaleDelta) - emits when user scales screen
     'move', // (deltaX, deltaY) - emits when screen moves by drag or scale
@@ -460,7 +460,7 @@ export default {
         this.isInDrag && !this.moveOptions.currentMoveDelta.x && !this.moveOptions.currentMoveDelta.y &&
         x > bBox.left && x < bBox.right && y > bBox.top && y < bBox.bottom
       ) {
-        this.$emit('clickClean'); // emit just click
+        this.$emit('clickClean', x - bBox.left, y - bBox.top); // emit clean click
       }
 
       this.isInDrag = false;
