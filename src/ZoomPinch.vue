@@ -56,7 +56,7 @@
       <slot/>
     </div>
 
-    <section class="debug">
+    <section class="debug" v-if="debug">
       <div>x: {{ offsetX }}</div>
       <div>y: {{ offsetY }}</div>
       <div>scale: {{ scale }}</div>
@@ -749,6 +749,12 @@ export default {
       this.updateMinMaxScales();
     },
     maxScale() {
+      this.updateMinMaxScales();
+    },
+    minScaleIsObjectFitContains() {
+      this.updateMinMaxScales();
+    },
+    minScaleIsObjectFitFill() {
       this.updateMinMaxScales();
     },
     offsetX() {

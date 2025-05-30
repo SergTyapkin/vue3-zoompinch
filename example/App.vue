@@ -56,8 +56,8 @@ body
       background url(./earth-icon.svg)
       background-size 300px 300px
   .image
-    //width 1000px
-    //height 1000px
+    width 2000px
+    height 1000px
     background #383838
 
 .options
@@ -213,7 +213,7 @@ body
     class="zoom-pinch-element"
     :class="{'with-bg': withBackground}"
   >
-    <img class="image" src="" alt="" ref="img" />
+    <img class="image" src="./example-bus.svg" alt="" />
   </ZoomPinch>
 </template>
 
@@ -265,12 +265,6 @@ export default {
 
       withBackground: true,
     }
-  },
-
-  mounted() {
-    setTimeout(() => {
-      this.$refs.img.src = 'http://localhost:5174/undefined/example-bus.svg';
-    }, 2000);
   },
 
   methods: {
