@@ -1,4 +1,5 @@
 node_modules
+.github
 .idea
 dist-example
 package-lock.json
