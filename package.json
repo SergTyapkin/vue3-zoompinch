@@ -13,22 +13,21 @@
     "dev": "vite --open --debug --config ./example/vite.config.mts"
   },
   "type": "module",
-  "main": "./dist/zoompinch.umd.js",
-  "module": "./dist/zoompinch.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/zoompinch.js",
-      "require": "./dist/zoompinch.umd.js"
-    },
+    ".": "./dist/index.js",
     "./style.css": "./dist/zoompinch.css"
   },
   "keywords": [
-    "modal",
-    "popup",
-    "prompt",
-    "alert",
-    "confirm"
+    "vue",
+    "zoom",
+    "pan",
+    "pinch",
+    "move",
+    "translate",
+    "map",
+    "image"
   ],
   "homepage": "https://github.com/SergTyapkin/vue3-zoompinch",
   "repository": {
