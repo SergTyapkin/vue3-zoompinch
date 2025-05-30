@@ -27,5 +27,6 @@ export default defineConfig(({ mode }: { command: 'build' | 'serve'; mode: 'deve
       cssCodeSplit: false,
       outDir: "../dist-example",
     },
+    base: `/${env.VITE_BASE_PATH}/`
   };
 });
