@@ -34,6 +34,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
+    environment: deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -47,5 +48,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
           publish_dir: ./dist-example
