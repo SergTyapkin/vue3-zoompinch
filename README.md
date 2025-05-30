@@ -72,7 +72,7 @@ Any *.vue file:
 > [!TIP]
 > All props are not required 🙃
 
-#### Controls
+### Controls
 
 | Prop    | Type    | Default | Comments |
 |---------|---------|---------|----------|
@@ -80,7 +80,7 @@ Any *.vue file:
 | touch   | boolean | false   |          |
 | gesture | boolean | true    |          |
 
-#### Constraints
+### Constraints
 
 | Prop                        | Type                                                                                     | Default                                                         | Comments                                                                                                           |
 |-----------------------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -95,7 +95,7 @@ Any *.vue file:
 | offsets                     | {<br/> left: number?,<br/> top: number?,<br/> right: number?,<br/> bottom: number?<br/>} | {<br/>left: 0,<br/> top: 0,<br/> right: 0,<br/> bottom: 0<br/>} |                                                                                                                    |
 | isOffsetsScalable           | boolean                                                                                  | true                                                            | Offsets will scales as like them is a part of inner object                                                         |
 
-#### Features
+### Features
 
 | Prop                   | Type    | Default   | Comments |
 |------------------------|---------|-----------|----------|
@@ -104,7 +104,7 @@ Any *.vue file:
 | mouseInertiaEnabled    | boolean | true      |          |
 | touchInertiaEnabled    | boolean | true      |          |
 
-#### Default values
+### Default values
 
 | Prop            | Type    | Default | Comments                        |
 |-----------------|---------|---------|---------------------------------|
@@ -113,7 +113,7 @@ Any *.vue file:
 | defaultCentered | boolean | false   | Overlaps `defaultX`, `defaultY` |
 | defaultScale    | number? | 1       |                                 |
 
-#### Service
+### Service
 
 | Prop                       | Type    | Default   | Comments                                    |
 |----------------------------|---------|-----------|---------------------------------------------|
