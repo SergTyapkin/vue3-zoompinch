@@ -571,7 +571,7 @@ export default {
       const dT = Date.now() - (this.moveOptions.lastUpdatedTime ?? 0);
       const speedX = (this.moveOptions.currentMoveDelta.x ?? 0) / dT * INERTIA_SENSIVITY;
       const speedY = (this.moveOptions.currentMoveDelta.y ?? 0) / dT * INERTIA_SENSIVITY;
-      if (speedX && speedY && isFinite(speedX) && isFinite(speedY)) {
+      if (dT && isFinite(speedX) && isFinite(speedY)) {
         fakeMove(speedX || 0, speedY || 0);
       }
     },
