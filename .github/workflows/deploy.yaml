@@ -17,7 +17,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 22
+          node-version: lts/*
+          cache: 'npm'
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -45,8 +46,12 @@ jobs:
           name: production-files
           path: ./dist-example
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: actions/deploy-pages@v4
+        id: deployment
         with:
           github_token: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
           publish_dir: ./dist-example
