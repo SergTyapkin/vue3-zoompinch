@@ -56,14 +56,19 @@
       <slot/>
     </div>
 
-    <section class="debug" v-if="debug">
+    <section class="debug">
       <div>x: {{ offsetX }}</div>
       <div>y: {{ offsetY }}</div>
       <div>scale: {{ scale }}</div>
       <hr>
+      <div>Min scale: {{ minScaleComputed }}</div>
+      <div>Max scale: {{ maxScaleComputed }}</div>
+      <hr>
       <div>moveOptions: {{JSON.stringify(moveOptions).replace(/([,{])/g, '$1\n').replace(/([}])/g, '\n$1')}}</div>
       <hr>
       <div>scaleOptions: {{JSON.stringify(scaleOptions).replace(/([,{])/g, '$1\n').replace(/([}])/g, '\n$1')}}</div>
+      <hr>
+      <div>innerElementSize: {{innerElementWidthComputed}}x{{innerElementHeightComputed}}</div>
     </section>
   </div>
 </template>
@@ -231,7 +236,13 @@ export default {
       },
 
       resizeObserver: undefined as ResizeObserver | undefined,
+      innerResizeObserver: undefined as ResizeObserver | undefined,
       scaleTimeoutObject: undefined as NodeJS.Timeout | undefined,
+
+      innerElementWidthComputed: -1,
+      innerElementHeightComputed: -1,
+      minScaleComputed: undefined as undefined | number,
+      maxScaleComputed: undefined as undefined | number,
     };
   },
 
@@ -242,30 +253,6 @@ export default {
         offsetX: this.$props.localStorageUniqueName + '-offset-x',
         offsetY: this.$props.localStorageUniqueName + '-offset-y',
       }
-    },
-    minScaleComputed() {
-      if (this.minScaleIsObjectFitContains) {
-        return Math.min(
-          this.$el?.clientHeight / this.innerElementHeightComputed,
-          this.$el?.clientWidth / this.innerElementWidthComputed,
-        );
-      } else if (this.minScaleIsObjectFitFill) {
-        return Math.max(
-          this.$el?.clientHeight / this.innerElementHeightComputed,
-          this.$el?.clientWidth / this.innerElementWidthComputed,
-        );
-      }
-      return this.minScale;
-    },
-    maxScaleComputed() {
-      return this.maxScale;
-    },
-
-    innerElementWidthComputed() {
-      return this.innerElementWidth || (this.$refs.innerElement as HTMLElement).clientWidth;
-    },
-    innerElementHeightComputed() {
-      return this.innerElementHeight || (this.$refs.innerElement as HTMLElement).clientHeight;
     },
   },
 
@@ -280,6 +267,8 @@ export default {
     window.addEventListener('touchmove', this.onTouchMove, {passive: false});
     this.resizeObserver = new ResizeObserver(this.updatePos);
     this.resizeObserver.observe(this.$el);
+    this.innerResizeObserver = new ResizeObserver(this.updateInnerElementSizes);
+    this.innerResizeObserver.observe(this.$refs.innerElement as HTMLElement);
 
     this.reset();
   },
@@ -292,7 +281,8 @@ export default {
     window.removeEventListener('touchend', this.onTouchEnd);
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('touchmove', this.onTouchMove);
-    this.resizeObserver?.unobserve(this.$el);
+    this.$el && this.resizeObserver?.unobserve(this.$el);
+    this.$refs.innerElement && this.innerResizeObserver?.unobserve(this.$refs.innerElement as HTMLElement);
   },
 
   methods: {
@@ -508,10 +498,10 @@ export default {
     },
 
     handlerScaleMultiply(scaleDelta: number, pageX: number, pageY: number, isNoAnimation = false, isAddToVariable = false) {
-      if (this.scale * scaleDelta > this.maxScaleComputed) {
+      if (this.maxScaleComputed && this.scale * scaleDelta > this.maxScaleComputed) {
         scaleDelta = this.maxScaleComputed / this.scale;
       }
-      if (this.scale * scaleDelta < this.minScaleComputed) {
+      if (this.minScaleComputed && this.scale * scaleDelta < this.minScaleComputed) {
         scaleDelta = this.minScaleComputed / this.scale;
       }
 
@@ -535,10 +525,10 @@ export default {
         scaleDelta *= this.scale * this.scale;
       }
 
-      if (this.scale + scaleDelta > this.maxScaleComputed) {
+      if (this.maxScaleComputed && this.scale + scaleDelta > this.maxScaleComputed) {
         scaleDelta = this.maxScaleComputed - this.scale;
       }
-      if (this.scale + scaleDelta < this.minScaleComputed) {
+      if (this.minScaleComputed && this.scale + scaleDelta < this.minScaleComputed) {
         scaleDelta = this.minScaleComputed - this.scale;
       }
 
@@ -581,7 +571,9 @@ export default {
       const dT = Date.now() - (this.moveOptions.lastUpdatedTime ?? 0);
       const speedX = (this.moveOptions.currentMoveDelta.x ?? 0) / dT * INERTIA_SENSIVITY;
       const speedY = (this.moveOptions.currentMoveDelta.y ?? 0) / dT * INERTIA_SENSIVITY;
-      fakeMove(speedX || 0, speedY || 0);
+      if (speedX && speedY && isFinite(speedX) && isFinite(speedY)) {
+        fakeMove(speedX || 0, speedY || 0);
+      }
     },
 
     loadNumberFromLocalStorage<T>(fieldName: string, defaultValue: T): number | T {
@@ -667,6 +659,34 @@ export default {
       }
       return {x: canMoveOnX, y: canMoveOnY};
     },
+    updateInnerElementSizes() {
+      this.innerElementWidthComputed = this.innerElementWidth || (this.$refs.innerElement as HTMLElement)?.clientWidth || -1;
+      this.innerElementHeightComputed = this.innerElementHeight || (this.$refs.innerElement as HTMLElement)?.clientHeight || -1;
+      this.updateMinMaxScales();
+      this.reset();
+    },
+    updateMinMaxScales() {
+      let minScale = this.minScale;
+      if (this.minScaleIsObjectFitContains) {
+        minScale = Math.min(
+          this.$el?.clientHeight / this.innerElementHeightComputed,
+          this.$el?.clientWidth / this.innerElementWidthComputed,
+        );
+      } else if (this.minScaleIsObjectFitFill) {
+        minScale = Math.max(
+          this.$el?.clientHeight / this.innerElementHeightComputed,
+          this.$el?.clientWidth / this.innerElementWidthComputed,
+        );
+      }
+      this.minScaleComputed = minScale;
+      this.maxScaleComputed = this.maxScale;
+      this.scale = this.getScaleLimited(this.scale);
+      this.updatePos();
+    },
+
+    getScaleLimited(scale: number) {
+      return Math.max(Math.min(scale, this.maxScaleComputed ?? Infinity), this.minScaleComputed ?? -Infinity);
+    },
 
     updatePos() {
       const {x, y} = this.isCanMoveBy(0, 0, this.offsetX, this.offsetY);
@@ -675,11 +695,13 @@ export default {
     },
 
     reset() {
-      this.scale = this.loadNumberFromLocalStorage(this.LocalStorageNames.scale, this.$props.defaultScale || 1);
+      const scale = this.loadNumberFromLocalStorage(this.LocalStorageNames.scale, this.$props.defaultScale || 1);
       const defaultX = this.defaultCentered ? (this.innerElementWidthComputed * this.scale - this.$el.clientWidth) / 2 : this.$props.defaultX ?? 0;
       const defaultY = this.defaultCentered ? (this.innerElementHeightComputed * this.scale - this.$el.clientHeight) / 2 : this.$props.defaultY ?? 0;
       const loadedOffsetX = this.loadNumberFromLocalStorage(this.LocalStorageNames.offsetX, defaultX);
       const loadedOffsetY = this.loadNumberFromLocalStorage(this.LocalStorageNames.offsetY, defaultY);
+
+      this.scale = this.getScaleLimited(scale);
 
       const {x: allowedDeltaX, y: allowedDeltaY} = this.isCanMoveBy(loadedOffsetX, loadedOffsetY, 0, 0);
       this.offsetX = allowedDeltaX;
@@ -713,8 +735,8 @@ export default {
     },
     defaultScale() {
       if (this.resetOnDefaultsChanged) {
-        if (this.defaultScale) {
-          this.setScale(this.defaultScale, 0, 0);
+        if (this.defaultScale || this.defaultScale === 0) {
+          this.setScale(this.getScaleLimited(this.defaultScale), 0, 0);
         }
       }
     },
@@ -722,6 +744,12 @@ export default {
       if (this.resetOnDefaultsChanged) {
         this.reset();
       }
+    },
+    minScale() {
+      this.updateMinMaxScales();
+    },
+    maxScale() {
+      this.updateMinMaxScales();
     },
     offsetX() {
       if (this.localStorageUniqueName) {
