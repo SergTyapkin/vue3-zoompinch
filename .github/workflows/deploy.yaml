@@ -32,10 +32,10 @@ jobs:
         run: npm run build:example
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: ./dist-example
+          path: ./dist-example/
 
   deploy:
     name: Deploy
@@ -52,4 +52,3 @@ jobs:
         id: deployment
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist-example
