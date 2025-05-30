@@ -2,6 +2,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Vue.js-components-green)
 ![npm](https://img.shields.io/npm/dt/%40sergtyapkin%2Fvue3-zoompinch)
+![GithubCI](https://github.com/sergtyapkin/vue3-zoompinch/actions/workflows/deploy.yaml/badge.svg)
 
 # [LIVE DEMO](https://sergtyapkin.github.io/vue3-zoompinch/)
 
