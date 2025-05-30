@@ -35,7 +35,6 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    environment: deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -53,5 +52,5 @@ jobs:
         uses: actions/deploy-pages@v4
         id: deployment
         with:
-          github_token: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist-example
