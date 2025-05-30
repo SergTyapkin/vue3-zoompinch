@@ -1,5 +1,6 @@
 node_modules
 .idea
+dist-example
 package-lock.json
 yarn.lock
 tsconfig.json
@@ -7,5 +8,6 @@ README.md
 .gitignore
 .git
 .npmignore
+vite.config.mts
 example
 src

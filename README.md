@@ -1,51 +1,95 @@
-# Modals and Popups Vue.js components
+# Best Zoom-pinch Vue.js component
+
 ![Static Badge](https://img.shields.io/badge/Vue.js-components-green)
-![npm](https://img.shields.io/npm/dt/%40sergtyapkin%2Fmodals-popups)
+![npm](https://img.shields.io/npm/dt/%40sergtyapkin%2Fvue3-zoompinch)
 
-Modals and popups components for your Vue.js app
+# [LIVE DEMO]()
 
+🔥 Light and fast Vue.js component for zoom-pinch, pan and translate inner element like in Google maps with really
+much customable settings
+
+> ![TIP]
+> Component can store it's state into localStorage and restore state from it.
+> To use it, just set the `localStorageUniqueName` prop!
+
+> ![IMPORTANT]
+> By default `gesture` controls are not enabled and wheel scrolling is scaling.
+> If you want to enable touchpad gestures and moving by wheel scrolling, enable `gesture`
+
+> ![IMPORTANT]
+> Automatically uses:
+> ```CSS
+> width: 100%;
+> height: 100%;
+> ```
 ----
 
-Usage: In your entrypoint .vue component (may be `App.vue`):
+## 👉 Usage:
+
 ```VUE
 
 <template>
-  <!-- Router component -->
-
-  <Popups ref="popups"></Popups>
-  <Modals ref="modals"></Modals>
+  <!-- ... -->
+  <ZoomPinch>
+    <!-- Any of your own inner HTML element. For example <img> -->
+  </ZoomPinch>
 </template>
-
-<script>
-  import {getCurrentInstance} from "vue";
-  import {Modals, Popups} from "@sergtyapkin/modals-popups";
-
-  export default {
-    components: {Modals, Popups},
-
-    mounted() {
-      const global = getCurrentInstance().appContext.config.globalProperties;
-
-      global.$modals = this.$refs.modals;
-      global.$popups = this.$refs.popups;
-      global.$app = this;
-    },
-  };
-</script>
 ```
 
-Now you can use in any child components:
-```JS
-this.$modals.alert(title, description='');
-this.$modals.prompt(title, description='', defaultText='');
-this.$modals.confirm(title, description='');
-// Returns:
-// 'modals.alert' -> null (window closed) / true ('OK' pressed)
-// 'modals.prompt' -> null (window closed) / 'some text' ('OK' pressed)
-// 'modals.confirm' -> null (window closed) / false ('No' pressed) / true ('Yes' pressed)
+## ⚙️ Props
 
-this.$popups.error(title, description='', timeToDisappear=3000);
-this.$popups.alert(title, description='', timeToDisappear=3000);
-this.$popups.success(title, description='', timeToDisappear=3000);
-// Returns undefined
-```
+All props are not required 🙃
+
+#### Controls
+
+| Prop    | Type    | Default | Comments |
+|---------|---------|---------|----------|
+| mouse   | boolean | false   |          |
+| touch   | boolean | false   |          |
+| gesture | boolean | true    |          |
+
+#### Constraints
+
+| Prop                        | Type                                                                                     | Default                                                         | Comments                                                                                                           |
+|-----------------------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| movableX                    | boolean                                                                                  | true                                                            |                                                                                                                    |
+| movableY                    | boolean                                                                                  | true                                                            |                                                                                                                    |
+| scalableX                   | boolean                                                                                  | true                                                            |                                                                                                                    |
+| scalableY                   | boolean                                                                                  | true                                                            |                                                                                                                    |
+| minScale                    | number?                                                                                  | undefined                                                       |                                                                                                                    |
+| maxScale                    | number?                                                                                  | undefined                                                       |                                                                                                                    |
+| minScaleIsObjectFitFill     | boolean                                                                                  | false                                                           | Sets minScale as like you write to inner object "object-fit: fill". Overlaps minScale                              |
+| minScaleIsObjectFitContains | boolean                                                                                  | false                                                           | Sets minScale as like you write to inner object "object-fit: contains". Overlaps minScale, minScaleIsObjectFitFill |
+| offsets                     | {<br/> left: number?,<br/> top: number?,<br/> right: number?,<br/> bottom: number?<br/>} | {<br/>left: 0,<br/> top: 0,<br/> right: 0,<br/> bottom: 0<br/>} |                                                                                                                    |
+| isOffsetsScalable           | boolean                                                                                  | true                                                            | Offsets will scales as like them is a part of inner object                                                         |
+
+#### Features
+
+| Prop                   | Type    | Default   | Comments |
+|------------------------|---------|-----------|----------|
+| localStorageUniqueName | string? | undefined |          |
+| smoothScale            | boolean | true      |          |
+| mouseInertiaEnabled    | boolean | true      |          |
+| touchInertiaEnabled    | boolean | true      |          |
+
+#### Default values
+
+| Prop            | Type    | Default | Comments                        |
+|-----------------|---------|---------|---------------------------------|
+| defaultX        | number? | 0       |                                 |
+| defaultY        | number? | 0       |                                 |
+| defaultCentered | boolean | false   | Overlaps `defaultX`, `defaultY` |
+| defaultScale    | number? | 1       |                                 |
+
+#### Service
+
+| Prop                       | Type    | Default   | Comments                                    |
+|----------------------------|---------|-----------|---------------------------------------------|
+| wheelSensitivityMultiplier | number  | 1         |                                             |
+| resetOnInnerSizeChanged    | boolean | true      |                                             |
+| resetOnDefaultsChanged     | boolean | true      |                                             |
+| innerElementWidth          | number? | undefined | Overrides inner element width               |
+| innerElementHeight         | number? | undefined | Overrides inner element height              |
+| debug                      | boolean | false     | Draws a fixed window with `x`, `y`, `scale` |
+
+

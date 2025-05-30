@@ -9,8 +9,8 @@
   },
   "scripts": {
     "build": "vue-tsc --declaration",
-    "example:build": "vite build",
-    "example:dev": "vite --open --debug"
+    "build:example": "vite build",
+    "dev": "vite --open --debug"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

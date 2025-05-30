@@ -80,16 +80,19 @@ body
       display flex
       justify-content space-between
       align-items center
+      gap 10px
       font-size 1.2rem
       transition color 0.2s ease
       padding 5px 0
+      cursor pointer
       &:hover
         color #fff
-        input
+        input:not([disabled])
           background #4f4f4f
       small
         color #838383
         white-space wrap
+        flex 1
       input
         align-self stretch
         padding 5px 8px
@@ -100,6 +103,8 @@ body
         transition background 0.2s ease
         &[type=checkbox]
           width 1.5rem
+        &[disabled]
+          opacity 0.3
   button
     margin-top 20px
     padding 10px
@@ -121,7 +126,7 @@ body
       <header>Controls</header>
       <label>Mouse <input type="checkbox" v-model="zoomPinchOptions.mouse"></label>
       <label>Touch <input type="checkbox" v-model="zoomPinchOptions.touch"></label>
-      <label>Gesture <input type="checkbox" v-model="zoomPinchOptions.gesture"></label>
+      <label>Gesture <small>use for wheel = move and touchpad gestures</small><input type="checkbox" v-model="zoomPinchOptions.gesture"></label>
     </section>
     <section>
       <header>Constraints</header>
@@ -129,8 +134,10 @@ body
       <label>Movable Y <input type="checkbox" v-model="zoomPinchOptions.movableY"></label>
       <label>Scalable X <input type="checkbox" v-model="zoomPinchOptions.scalableX"></label>
       <label>Scalable Y <input type="checkbox" v-model="zoomPinchOptions.scalableY"></label>
-      <label>Min scale <input type="number" v-model="zoomPinchOptions.minScale"></label>
+      <label>Min scale <input type="number" v-model="zoomPinchOptions.minScale" :disabled="zoomPinchOptions.minScaleIsObjectFitFill || zoomPinchOptions.minScaleIsObjectFitContains"></label>
       <label>Max scale <input type="number" v-model="zoomPinchOptions.maxScale"></label>
+      <label>Min scale is like <br>object-fit: fill <small>(overlaps minScale)</small><input type="checkbox" v-model="zoomPinchOptions.minScaleIsObjectFitFill" :disabled="zoomPinchOptions.minScaleIsObjectFitContains"></label>
+      <label>Min scale is like <br>object-fit: contains <small>(overlaps minScale, object-fit: fill)</small><input type="checkbox" v-model="zoomPinchOptions.minScaleIsObjectFitContains"></label>
     </section>
     <section>
       <header>Offsets</header>
@@ -141,23 +148,27 @@ body
       <label>Bottom <input type="number" v-model="zoomPinchOptions.offsets.bottom"></label>
     </section>
     <section>
-      <header>Inertia</header>
+      <header>Features</header>
+      <label>Local storage name <input type="text" v-model="zoomPinchOptions.localStorageUniqueName"></label>
+      <label>Smooth scale <input type="checkbox" v-model="zoomPinchOptions.smoothScale"></label>
       <label>Mouse inertia <input type="checkbox" v-model="zoomPinchOptions.mouseInertiaEnabled"></label>
       <label>Touch inertia <input type="checkbox" v-model="zoomPinchOptions.touchInertiaEnabled"></label>
     </section>
     <section>
       <header>Default values</header>
-      <label>x <input type="number" v-model="zoomPinchOptions.defaultX"></label>
-      <label>y <input type="number" v-model="zoomPinchOptions.defaultY"></label>
+      <label>x <input type="number" v-model="zoomPinchOptions.defaultX" :disabled="zoomPinchOptions.defaultCentered"></label>
+      <label>y <input type="number" v-model="zoomPinchOptions.defaultY" :disabled="zoomPinchOptions.defaultCentered"></label>
       <label>Centered <small>(overlaps x, y)</small> <input type="checkbox" v-model="zoomPinchOptions.defaultCentered"></label>
       <label>scale <input type="number" v-model="zoomPinchOptions.defaultScale"></label>
       <label>Reset on defaults changed <input type="checkbox" v-model="zoomPinchOptions.resetOnDefaultsChanged"></label>
     </section>
     <section>
-      <header>Other</header>
+      <header>Service</header>
+      <label>Wheel sensitivity <input type="number" v-model="zoomPinchOptions.wheelSensitivityMultiplier"></label>
+      <label>Reset on inner size changed <input type="checkbox" v-model="zoomPinchOptions.resetOnInnerSizeChanged"></label>
+      <label>Inner element width <input type="number" v-model="zoomPinchOptions.innerElementWidth"></label>
+      <label>Inner element height <input type="number" v-model="zoomPinchOptions.innerElementHeight"></label>
       <label>Debug <input type="checkbox" v-model="zoomPinchOptions.debug"></label>
-      <label>Smooth scale <input type="checkbox" v-model="zoomPinchOptions.smoothScale"></label>
-      <label>Local storage uid <input type="text" v-model="zoomPinchOptions.localStorageUniqueName"></label>
       <label>With custom background <input type="checkbox" v-model="withBackground"></label>
     </section>
 
@@ -179,6 +190,8 @@ body
     :scalable-x="zoomPinchOptions.scalableX"
     :scalable-y="zoomPinchOptions.scalableY"
     :min-scale="zoomPinchOptions.minScale"
+    :min-scale-is-object-fit-fill="zoomPinchOptions.minScaleIsObjectFitFill"
+    :min-scale-is-object-fit-contains="zoomPinchOptions.minScaleIsObjectFitContains"
     :max-scale="zoomPinchOptions.maxScale"
 
     :offsets="zoomPinchOptions.offsets"
@@ -192,6 +205,9 @@ body
     :default-scale="zoomPinchOptions.defaultScale"
     :centered="zoomPinchOptions.defaultCentered"
     :reset-on-defaults-changed="zoomPinchOptions.resetOnDefaultsChanged"
+    :reset-on-inner-size-changed="zoomPinchOptions.resetOnInnerSizeChanged"
+    :inner-element-width="zoomPinchOptions.innerElementWidth"
+    :inner-element-height="zoomPinchOptions.innerElementHeight"
     ref="zoompinch"
     class="zoom-pinch-element"
     :class="{'with-bg': withBackground}"
@@ -217,7 +233,8 @@ export default {
         wheelSensitivityMultiplier: 1,
         maxScale: 10,
         minScale: 0.2,
-        minScaleIsFullSize: false,
+        minScaleIsObjectFitFill: false,
+        minScaleIsObjectFitContains: false,
         offsets: {
           left: 200,
           top: 200,
@@ -233,6 +250,10 @@ export default {
         mouseInertiaEnabled: true,
         touchInertiaEnabled: true,
         resetOnDefaultsChanged: true,
+        resetOnInnerSizeChanged: true,
+
+        innerElementWidth: undefined,
+        innerElementHeight: undefined,
 
         debug: true,
         mouse: true,

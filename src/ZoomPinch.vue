@@ -131,7 +131,8 @@ export default {
       type: Number,
       default: DEFAULT_MIN_SCALE,
     },
-    minScaleIsFullSize: Boolean,
+    minScaleIsObjectFitFill: Boolean,
+    minScaleIsObjectFitContains: Boolean,
     innerElementWidth: {
       type: Number,
       default: undefined,
@@ -158,7 +159,7 @@ export default {
     },
     defaultCentered: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     isOffsetsScalable: {
@@ -237,10 +238,15 @@ export default {
       }
     },
     minScaleComputed() {
-      if (this.minScaleIsFullSize) {
+      if (this.minScaleIsObjectFitContains) {
+        return Math.min(
+          this.$el?.clientHeight / this.innerElementHeightComputed,
+          this.$el?.clientWidth / this.innerElementWidthComputed,
+        );
+      } else if (this.minScaleIsObjectFitFill) {
         return Math.max(
           this.$el?.clientHeight / this.innerElementHeightComputed,
-          this.$el?.clientWidth / this.innerElementHeightComputed,
+          this.$el?.clientWidth / this.innerElementWidthComputed,
         );
       }
       return this.minScale;
@@ -269,15 +275,6 @@ export default {
     this.resizeObserver = new ResizeObserver(this.updatePos);
     this.resizeObserver.observe(this.$el);
 
-
-    // Object.keys(window).forEach(key => {
-    //   if (/^on/.test(key)) {
-    //     window.addEventListener(key.slice(2), event => {
-    //       console.log(event.type);
-    //     });
-    //   }
-    // });
-
     this.reset();
   },
   unmounted() {
@@ -295,7 +292,6 @@ export default {
   methods: {
     // ------ Gesture events ---------
     onGestureStart(e: Event) {
-      console.log("GESTURE START!")
       if (!this.gesture) {
         return;
       }
@@ -527,7 +523,11 @@ export default {
       this.setScale(this.scale * scaleDelta, compensatingX, compensatingY, isNoAnimation, isAddToVariable);
     },
     handlerScaleAdd(scaleDelta: number, pageX: number, pageY: number, isNoAnimation = false) {
-      scaleDelta *= this.scale > 1 ? 1 / this.scale : this.scale / 2;
+      if (this.scale > 1) {
+        scaleDelta *= Math.sqrt(this.scale);
+      } else {
+        scaleDelta *= this.scale * this.scale;
+      }
 
       if (this.scale + scaleDelta > this.maxScaleComputed) {
         scaleDelta = this.maxScaleComputed - this.scale;
@@ -575,7 +575,6 @@ export default {
       const dT = Date.now() - (this.moveOptions.lastUpdatedTime ?? 0);
       const speedX = (this.moveOptions.currentMoveDelta.x ?? 0) / dT * INERTIA_SENSIVITY;
       const speedY = (this.moveOptions.currentMoveDelta.y ?? 0) / dT * INERTIA_SENSIVITY;
-      console.log(speedX, speedY)
       fakeMove(speedX, speedY);
     },
 

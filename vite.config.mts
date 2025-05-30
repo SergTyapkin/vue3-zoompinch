@@ -25,6 +25,7 @@ export default defineConfig(({ mode }: { command: 'build' | 'serve'; mode: 'deve
       target: 'esnext',
       minify: false,
       cssCodeSplit: false,
+      outDir: "../dist-example",
     },
   };
 });

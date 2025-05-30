@@ -1,5 +1,6 @@
 node_modules
 .idea
 dist
+dist-example
 package-lock.json
 yarn.lock
