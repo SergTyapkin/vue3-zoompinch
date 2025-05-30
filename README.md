@@ -1,4 +1,4 @@
-# Best Zoom-pinch Vue.js component
+# Zoom-pinch Vue.js component
 
 ![Static Badge](https://img.shields.io/badge/Vue.js-components-green)
 ![npm](https://img.shields.io/npm/dt/%40sergtyapkin%2Fvue3-zoompinch)
@@ -6,7 +6,7 @@
 
 # [LIVE DEMO](https://sergtyapkin.github.io/vue3-zoompinch/)
 
-🔥 Light and fast Vue.js component for zoom-pinch, pan and translate inner element like in Google maps with really
+🔥 Super easy light-weight and fast Vue.js component for zoom-pinch-pan-move inner element like in Google maps with really
 much customable settings
 
 > [!TIP]
