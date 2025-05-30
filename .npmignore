@@ -1,0 +1,11 @@
+node_modules
+.idea
+package-lock.json
+yarn.lock
+tsconfig.json
+README.md
+.gitignore
+.git
+.npmignore
+example
+src
