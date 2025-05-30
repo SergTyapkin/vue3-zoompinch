@@ -127,7 +127,7 @@ body
       <header>Controls</header>
       <label>Mouse <input type="checkbox" v-model="zoomPinchOptions.mouse"></label>
       <label>Touch <input type="checkbox" v-model="zoomPinchOptions.touch"></label>
-      <label>Gesture <small>use for wheel = move and touchpad gestures</small><input type="checkbox" v-model="zoomPinchOptions.gesture"></label>
+      <label>Gesture <small>Use for wheel moving and touchpad gestures</small><input type="checkbox" v-model="zoomPinchOptions.gesture"></label>
     </section>
     <section>
       <header>Constraints</header>
@@ -256,7 +256,7 @@ export default {
         innerElementWidth: undefined,
         innerElementHeight: undefined,
 
-        debug: true,
+        debug: false,
         mouse: true,
         touch: true,
         gesture: false,
