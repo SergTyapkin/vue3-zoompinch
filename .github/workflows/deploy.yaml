@@ -34,7 +34,7 @@ jobs:
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
-          name: production-files
+          name: github-pages
           path: ./dist-example
 
   deploy:
@@ -44,12 +44,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: production-files
-          path: ./dist-example
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
