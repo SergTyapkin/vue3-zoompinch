@@ -6,6 +6,10 @@ import { resolve } from 'node:path';
 export default defineConfig({
   plugins: [vue(), dts()],
   build: {
+    modulePreload: false,
+    target: 'esnext',
+    minify: true,
+    cssCodeSplit: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ZoomPinch',
