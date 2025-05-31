@@ -29,7 +29,11 @@ much customable settings
 [![Static Badge](https://img.shields.io/badge/Props-blue)](#-props)
 [![Static Badge](https://img.shields.io/badge/Emits-blue)](#-emits)
 [![Static Badge](https://img.shields.io/badge/Methods-blue)](#-methods)
+
 ---
+<br>
+<br>
+<br>
 
 ## 👉 Usage:
 main.ts:
@@ -72,6 +76,12 @@ Any *.vue file:
   }
 </script>
 ```
+
+
+---
+<br>
+<br>
+<br>
 
 ## ⚙️ Props
 
@@ -130,6 +140,12 @@ Any *.vue file:
 | innerElementHeight         | number? | undefined | Overrides inner element height              |
 | debug                      | boolean | false     | Draws a fixed window with `x`, `y`, `scale` |
 
+
+---
+<br>
+<br>
+<br>
+
 ## ⚙️ Emits
 ```JS
 drag(dx: number, dy: number)
@@ -147,6 +163,11 @@ scale(scaleDelta: number)
 clickClear(x: number, y: number)
 // Emits only if user clicks on element without any dragging
 ```
+
+---
+<br>
+<br>
+<br>
 
 ## ⚙️ Methods
 ```JS
