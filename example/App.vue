@@ -44,7 +44,7 @@ body
   border-radius 15px
   box-shadow 0 0 20px black
   position relative
-  height calc(100vh - 60px)
+  min-height calc(100vh - 60px)
   flex 1
   &.with-bg
     background #2b2b2b linear-gradient(-20deg, mix(red, transparent, 30%), mix(black, transparent, 30%))
@@ -62,13 +62,24 @@ body
 
 .options
   flex 1
-  max-width 400px
   border-radius 15px
   padding 20px
   box-shadow 0 0 20px black
   background #2b2b2b
-  height fit-content
-  padding-bottom 80px
+  min-height fit-content
+  overflow hidden
+  @media(min-width: 701px)
+    max-width 400px
+  &.closed
+    position absolute
+    z-index 999
+    opacity 0.5
+    transition opacity 0.3s ease
+    padding 0
+    &:hover
+      opacity 1
+    section:not(.settings)
+      display none
 
   section
     border-bottom 1px solid #4b4b4b
@@ -106,6 +117,16 @@ body
           width 1.5rem
         &[disabled]
           opacity 0.3
+
+    &.settings
+      background #3d3d3d
+      padding 15px
+      border-radius 10px
+      cursor pointer
+      transition background 0.3s ease
+      &:hover
+        background #4f4f4f
+
   button
     margin-top 20px
     padding 10px
@@ -122,7 +143,12 @@ body
 </style>
 
 <template>
-  <section class="options">
+  <section class="options" :class="{closed: !settingsOpened}">
+    <section @click="settingsOpened = !settingsOpened" class="settings">
+      <span v-if="settingsOpened">Close settings</span>
+      <span v-else>Open settings</span>
+    </section>
+
     <section>
       <header>Controls</header>
       <label>Mouse <input type="checkbox" v-model="zoomPinchOptions.mouse"></label>
@@ -173,7 +199,9 @@ body
       <label>With custom background <input type="checkbox" v-model="withBackground"></label>
     </section>
 
-    <button @click="resetZoomPinch">Reset</button>
+    <section class="buttons">
+      <button @click="resetZoomPinch">Reset</button>
+    </section>
   </section>
 
   <ZoomPinch
@@ -225,6 +253,8 @@ export default {
 
   data() {
     return {
+      settingsOpened: false,
+
       zoomPinchOptions: {
         localStorageUniqueName: '',
         scalableX: true,
