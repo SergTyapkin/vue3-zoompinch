@@ -23,7 +23,13 @@ much customable settings
 > width: 100%;
 > height: 100%;
 > ```
-----
+
+**Navigation:** <br>
+[![Static Badge](https://img.shields.io/badge/Usage-blue)](#-usage)
+[![Static Badge](https://img.shields.io/badge/Props-blue)](#-props)
+[![Static Badge](https://img.shields.io/badge/Emits-blue)](#-emits)
+[![Static Badge](https://img.shields.io/badge/Methods-blue)](#-methods)
+---
 
 ## 👉 Usage:
 main.ts:
@@ -124,4 +130,34 @@ Any *.vue file:
 | innerElementHeight         | number? | undefined | Overrides inner element height              |
 | debug                      | boolean | false     | Draws a fixed window with `x`, `y`, `scale` |
 
+## ⚙️ Emits
+```JS
+drag(dx: number, dy: number)
+// Emits only when user drags and moves inner element 
+```
+```JS
+move(dx: number, dy: number)
+// Emits when user moves inner element or it moves with scaling
+```
+```JS
+scale(scaleDelta: number)
+// Emits with scaling
+```
+```JS
+clickClear(x: number, y: number)
+// Emits only if user clicks on element without any dragging
+```
 
+## ⚙️ Methods
+```JS
+reset(): void
+// Reset translation and scale to defaults
+```
+```JS
+getScale(): number
+// Returns current scale
+```
+```JS
+getTranslate(): {x: number, y: number}
+// Returns current translation
+```

@@ -66,8 +66,6 @@ body
   padding 20px
   box-shadow 0 0 20px black
   background #2b2b2b
-  min-height fit-content
-  overflow hidden
   @media(min-width: 701px)
     max-width 400px
   &.closed
@@ -113,6 +111,8 @@ body
         border none
         font-size 1rem
         transition background 0.2s ease
+        @media(max-width: 700px)
+          width 100%
         &[type=checkbox]
           width 1.5rem
         &[disabled]
@@ -253,7 +253,7 @@ export default {
 
   data() {
     return {
-      settingsOpened: false,
+      settingsOpened: window.innerWidth > 700,
 
       zoomPinchOptions: {
         localStorageUniqueName: '',

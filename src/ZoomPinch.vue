@@ -696,21 +696,21 @@ export default {
 
     reset() {
       const scale = this.loadNumberFromLocalStorage(this.LocalStorageNames.scale, this.$props.defaultScale || 1);
+      this.scale = this.getScaleLimited(scale);
       const defaultX = this.defaultCentered ? (this.innerElementWidthComputed * this.scale - this.$el.clientWidth) / 2 : this.$props.defaultX ?? 0;
       const defaultY = this.defaultCentered ? (this.innerElementHeightComputed * this.scale - this.$el.clientHeight) / 2 : this.$props.defaultY ?? 0;
       const loadedOffsetX = this.loadNumberFromLocalStorage(this.LocalStorageNames.offsetX, defaultX);
       const loadedOffsetY = this.loadNumberFromLocalStorage(this.LocalStorageNames.offsetY, defaultY);
 
-      this.scale = this.getScaleLimited(scale);
 
       const {x: allowedDeltaX, y: allowedDeltaY} = this.isCanMoveBy(loadedOffsetX, loadedOffsetY, 0, 0);
       this.offsetX = allowedDeltaX;
       this.offsetY = allowedDeltaY;
     },
-    getScale() {
+    getScale(): number {
       return this.scale;
     },
-    getTranslate() {
+    getTranslate(): {x: number, y: number} {
       return {x: this.offsetX, y: this.offsetY};
     },
   },
