@@ -25,17 +25,17 @@ much customable settings
 > ```
 
 **Navigation:** <br>
-[![Static Badge](https://img.shields.io/badge/Usage-blue)](#-usage)
-[![Static Badge](https://img.shields.io/badge/Props-blue)](#-props)
-[![Static Badge](https://img.shields.io/badge/Emits-blue)](#-emits)
-[![Static Badge](https://img.shields.io/badge/Methods-blue)](#-methods)
+[![Static Badge](https://img.shields.io/badge/Usage-blue)](#usage)
+[![Static Badge](https://img.shields.io/badge/Props-blue)](#props)
+[![Static Badge](https://img.shields.io/badge/Emits-blue)](#emits)
+[![Static Badge](https://img.shields.io/badge/Methods-blue)](#methods)
 
 ---
 <br>
 <br>
 <br>
 
-## 👉 Usage:
+# Usage
 main.ts:
 ```JS
 import '@sergtyapkin/vue3-zoompinch/style.css';
@@ -83,12 +83,12 @@ Any *.vue file:
 <br>
 <br>
 
-## ⚙️ Props
+# Props
 
 > [!TIP]
 > All props are not required 🙃
 
-### Controls
+## Controls
 
 | Prop    | Type    | Default | Comments |
 |---------|---------|---------|----------|
@@ -96,7 +96,7 @@ Any *.vue file:
 | touch   | boolean | false   |          |
 | gesture | boolean | true    |          |
 
-### Constraints
+## Constraints
 
 | Prop                        | Type                                                                                     | Default                                                         | Comments                                                                                                           |
 |-----------------------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -111,7 +111,7 @@ Any *.vue file:
 | offsets                     | {<br/> left: number?,<br/> top: number?,<br/> right: number?,<br/> bottom: number?<br/>} | {<br/>left: 0,<br/> top: 0,<br/> right: 0,<br/> bottom: 0<br/>} |                                                                                                                    |
 | isOffsetsScalable           | boolean                                                                                  | true                                                            | Offsets will scales as like them is a part of inner object                                                         |
 
-### Features
+## Features
 
 | Prop                   | Type    | Default   | Comments |
 |------------------------|---------|-----------|----------|
@@ -120,7 +120,7 @@ Any *.vue file:
 | mouseInertiaEnabled    | boolean | true      |          |
 | touchInertiaEnabled    | boolean | true      |          |
 
-### Default values
+## Default values
 
 | Prop            | Type    | Default | Comments                        |
 |-----------------|---------|---------|---------------------------------|
@@ -129,7 +129,7 @@ Any *.vue file:
 | defaultCentered | boolean | false   | Overlaps `defaultX`, `defaultY` |
 | defaultScale    | number? | 1       |                                 |
 
-### Service
+## Service
 
 | Prop                       | Type    | Default   | Comments                                    |
 |----------------------------|---------|-----------|---------------------------------------------|
@@ -146,7 +146,7 @@ Any *.vue file:
 <br>
 <br>
 
-## ⚙️ Emits
+# Emits
 ```JS
 drag(dx: number, dy: number)
 // Emits only when user drags and moves inner element 
@@ -169,7 +169,7 @@ clickClear(x: number, y: number)
 <br>
 <br>
 
-## ⚙️ Methods
+# Methods
 ```JS
 reset(): void
 // Reset translation and scale to defaults
